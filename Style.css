@@ -1,37 +1,50 @@
+/* CSS */
 body {
-    font-family: Arial, sans-serif;
-    background-color: rgb(30, 30, 30);
-    color: white;
-  }
-  
+  font-family: Arial, sans-serif;
+  background-color: rgb(30, 30, 30);
+  color: white;
+
+  /* Combine the duplicate margin property */
+  margin: 0 auto;
+  max-width: 800px;
+}
+
   h1 {
     text-align: center;
     font-family: Georgia, 'Times New Roman', Times, serif;
   }
-  
+
   form {
     margin: 20px auto;
     text-align: center;
   }
-  
+
   input[type="text"] {
     padding: 5px;
     width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
   }
-  
+
   button {
     padding: 5px 10px;
+    margin-left: 10px;
+    background-color: rgb(30, 30, 30);
+    color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+    cursor: pointer;
   }
-  
+
   #current-weather,
-  #forecast {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin: 20px auto;
-    max-width: 800px;
-  }
-  
+#forecast {
+  display: flex;
+  flex-direction: row; /* Change flex-wrap to flex-direction */
+  justify-content: space-between;
+  margin: 20px auto;
+  max-width: 800px;
+}
+
   .weather-card {
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -39,8 +52,9 @@ body {
     margin-bottom: 10px;
     width: 150px;
     text-align: center;
+    margin-right: 10px; /* Add margin-right for spacing between weather cards */
   }
-  
+
   #search-history {
     display: flex;
     flex-wrap: wrap;
@@ -48,8 +62,9 @@ body {
     margin: 20px auto;
     max-width: 800px;
     margin: 20px auto;
+    max-width: 800px;
   }
-  
+
   .search-history-item {
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -59,17 +74,20 @@ body {
     text-align: center;
     cursor: pointer;
   }
-  
-  #clear-history {
+
+  #clear-history,
+  #search-history {
     display: flex;
-    text-align: center;
-    margin: 20px auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px auto; /* Combine the duplicate margin property */
     max-width: 800px;
   }
 
+  #clear-history,
   #search-history-title {
     text-align: center;
-    margin: 20px auto;
+    margin: 20px auto; /* Combine the duplicate margin property */
     max-width: 800px;
     font-size: 20px;
     font-weight: bold;

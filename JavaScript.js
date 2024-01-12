@@ -7,7 +7,7 @@ const searchHistoryContainer = document.getElementById('search-history');
 const clearHistoryButton = document.getElementById('clear-history');
 const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
 
-searchForm.addEventListener('submit', function(event) {
+searchForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const city = cityInput.value.trim();
   if (city) {
@@ -16,14 +16,14 @@ searchForm.addEventListener('submit', function(event) {
   }
 });
 
-searchHistoryContainer.addEventListener('click', function(event) {
+searchHistoryContainer.addEventListener('click', (event) => {
   if (event.target.classList.contains('search-history-item')) {
     const city = event.target.dataset.city;
     getWeather(city);
   }
 });
 
-clearHistoryButton.addEventListener('click', function() {
+clearHistoryButton.addEventListener('click', () => {
   clearSearchHistory();
 });
 
@@ -86,7 +86,7 @@ function showWeather(data) {
 
   // Forecast
   const forecast = data.forecast.forecastday;
-  
+
   forecast.forEach(day => {
     const forecastCard = document.createElement('div');
     forecastCard.classList.add('weather-card');
@@ -126,7 +126,6 @@ function updateSearchHistory(city) {
 
 function renderSearchHistory() {
   searchHistoryContainer.innerHTML = '';
-
   searchHistory.forEach(city => {
     const searchHistoryItem = document.createElement('div');
     searchHistoryItem.classList.add('search-history-item');
