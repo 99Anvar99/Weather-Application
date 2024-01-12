@@ -1,5 +1,3 @@
-Deployed Page: https://99anvar99.github.io/Weather-Application/
-
 # Weather-Dashboard
 ![image](https://github.com/99Anvar99/Weather-Application/assets/60616540/00261ac8-39d2-4886-ae1a-7bd1a019ad4e)
 
