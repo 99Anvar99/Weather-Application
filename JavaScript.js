@@ -7,113 +7,118 @@ const searchHistoryContainer = document.getElementById('search-history');
 const clearHistoryButton = document.getElementById('clear-history');
 const searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
 
-searchForm.addEventListener('submit', (event) => {
+searchForm.addEventListener('submit', handleSearch);
+searchHistoryContainer.addEventListener('click', handleHistoryClick);
+clearHistoryButton.addEventListener('click', clearSearchHistory);
+
+function handleSearch(event) {
   event.preventDefault();
   const city = cityInput.value.trim();
   if (city) {
     getWeather(city);
     cityInput.value = '';
   }
-});
+}
 
-searchHistoryContainer.addEventListener('click', (event) => {
+function handleHistoryClick(event) {
   if (event.target.classList.contains('search-history-item')) {
     const city = event.target.dataset.city;
     getWeather(city);
   }
-});
+}
 
-clearHistoryButton.addEventListener('click', () => {
-  clearSearchHistory();
-});
-
-function getWeather(city) {
+async function getWeather(city) {
   const apiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=5`;
 
-  fetch(apiUrl)
-    .then(response => response.json())
-    .then(data => {
-      if (data.error) {
-        showError(data.error.message);
-      } else {
-        showWeather(data);
-        updateSearchHistory(city);
-      }
-    })
-    .catch(error => {
-      showError('An error occurred. Please try again later.');
-      console.error(error);
-    });
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    if (data.error) {
+      showError(data.error.message);
+    } else {
+      showWeather(data);
+      updateSearchHistory(city);
+    }
+  } catch (error) {
+    showError('An error occurred. Please try again later.');
+    console.error(error);
+  }
 }
 
 function showWeather(data) {
-  // Clear previous weather data
   currentWeatherContainer.innerHTML = '';
   forecastContainer.innerHTML = '';
 
-  // Current weather
-  const currentWeather = data.current;
+  const { current, location, forecast } = data;
 
-  const currentWeatherCard = document.createElement('div');
-  currentWeatherCard.classList.add('weather-card');
-
-  const cityElement = document.createElement('h2');
-  cityElement.textContent = data.location.name;
-  currentWeatherCard.appendChild(cityElement);
-
-  const dateElement = document.createElement('p');
-  dateElement.textContent = new Date().toDateString();
-  currentWeatherCard.appendChild(dateElement);
-
-  const iconElement = document.createElement('img');
-  iconElement.src = currentWeather.condition.icon;
-  iconElement.alt = currentWeather.condition.text;
-  currentWeatherCard.appendChild(iconElement);
-
-  const tempElement = document.createElement('p');
-  tempElement.textContent = `Temperature: ${currentWeather.temp_c}°C`;
-  currentWeatherCard.appendChild(tempElement);
-
-  const humidityElement = document.createElement('p');
-  humidityElement.textContent = `Humidity: ${currentWeather.humidity}%`;
-  currentWeatherCard.appendChild(humidityElement);
-
-  const windElement = document.createElement('p');
-  windElement.textContent = `Wind Speed: ${currentWeather.wind_kph} km/h`;
-  currentWeatherCard.appendChild(windElement);
+  const currentWeatherCard = createWeatherCard({
+    title: location.name,
+    date: new Date().toDateString(),
+    icon: current.condition.icon,
+    alt: current.condition.text,
+    temperature: `Temperature: ${current.temp_c}°C`,
+    humidity: `Humidity: ${current.humidity}%`,
+    wind: `Wind Speed: ${current.wind_kph} km/h`
+  });
 
   currentWeatherContainer.appendChild(currentWeatherCard);
 
-  // Forecast
-  const forecast = data.forecast.forecastday;
-
-  forecast.forEach(day => {
-    const forecastCard = document.createElement('div');
-    forecastCard.classList.add('weather-card');
-
-    const dateElement = document.createElement('h3');
-    dateElement.textContent = new Date(day.date).toDateString();
-    forecastCard.appendChild(dateElement);
-
-    const iconElement = document.createElement('img');
-    iconElement.src = day.day.condition.icon;
-    iconElement.alt = day.day.condition.text;
-    forecastCard.appendChild(iconElement);
-
-    const tempElement = document.createElement('p');
-    tempElement.textContent = `Temperature: ${day.day.avgtemp_c}°C`;
-    forecastCard.appendChild(tempElement);
-
-    const windElement = document.createElement('p');
-    windElement.textContent = `Wind Speed: ${day.day.maxwind_kph} km/h`;
-    forecastCard.appendChild(windElement);
-
-    const humidityElement = document.createElement('p');
-    humidityElement.textContent = `Humidity: ${day.day.avghumidity}%`;
-    forecastCard.appendChild(humidityElement);
+  forecast.forecastday.forEach(day => {
+    const forecastCard = createWeatherCard({
+      title: new Date(day.date).toDateString(),
+      icon: day.day.condition.icon,
+      alt: day.day.condition.text,
+      temperature: `Temperature: ${day.day.avgtemp_c}°C`,
+      wind: `Wind Speed: ${day.day.maxwind_kph} km/h`,
+      humidity: `Humidity: ${day.day.avghumidity}%`
+    });
 
     forecastContainer.appendChild(forecastCard);
   });
+}
+
+function createWeatherCard({ title, date, icon, alt, temperature, humidity, wind }) {
+  const card = document.createElement('div');
+  card.classList.add('weather-card');
+
+  if (title) {
+    const titleElement = document.createElement('h2');
+    titleElement.textContent = title;
+    card.appendChild(titleElement);
+  }
+
+  if (date) {
+    const dateElement = document.createElement('p');
+    dateElement.textContent = date;
+    card.appendChild(dateElement);
+  }
+
+  if (icon) {
+    const iconElement = document.createElement('img');
+    iconElement.src = icon;
+    iconElement.alt = alt;
+    card.appendChild(iconElement);
+  }
+
+  if (temperature) {
+    const tempElement = document.createElement('p');
+    tempElement.textContent = temperature;
+    card.appendChild(tempElement);
+  }
+
+  if (humidity) {
+    const humidityElement = document.createElement('p');
+    humidityElement.textContent = humidity;
+    card.appendChild(humidityElement);
+  }
+
+  if (wind) {
+    const windElement = document.createElement('p');
+    windElement.textContent = wind;
+    card.appendChild(windElement);
+  }
+
+  return card;
 }
 
 function updateSearchHistory(city) {

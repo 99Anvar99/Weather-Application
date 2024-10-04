@@ -1,27 +1,38 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Weather Dashboard</title>
-    <link rel="stylesheet" href="Style.css">
-  </head>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Dashboard</title>
+  <link rel="stylesheet" href="Style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
 <body>
   <div class="container">
-    <h1>Weather Dashboard</h1>
-    <div class="search-container">
-      <form id="search-form">
-        <input type="text" id="city-input" placeholder="Enter a city">
-        <button type="submit">Search</button>
-      </form>
+    <header>
+      <h1>Weather Dashboard</h1>
+    </header>
+    <main>
+      <div class="search-container">
+        <form id="search-form">
+          <input type="text" id="city-input" placeholder="Enter a city">
+          <button type="submit"><i class="fas fa-search"></i> Search</button>
+        </form>
+      </div>
+      <div class="weather-container">
+        <section id="current-weather"></section>
+        <section id="forecast"></section>
+      </div>
+    </main>
+    <aside>
+      <h2 id="search-history-title">Search History</h2>
+      <div id="search-history"></div>
+      <button id="clear-history">Clear History</button>
+    </aside>
   </div>
-  <div class="container">
-    <div id="current-weather"></div> 
-    <div id="forecast"></div>
-  </div>
-  <br><br/>
-  <p id="search-history-title">Search History</p>
-  <div id="search-history"></div>
-  <button id="clear-history">Clear History</button>
-</div>
   <script src="JavaScript.js"></script>
 </body>
+
 </html>
